@@ -78,7 +78,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 return Image.asset(
                   _onboardingData[index]['image']!,
                   fit: BoxFit.cover,
-                  alignment: Alignment.centerRight,
+                  alignment: Alignment.topCenter,
                 );
               },
             ),
