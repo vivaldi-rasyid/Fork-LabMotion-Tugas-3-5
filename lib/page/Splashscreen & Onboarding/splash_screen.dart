@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// Import file onboarding yang baru kita buat:
 import 'package:motion_apps/page/Splashscreen & Onboarding/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -34,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/logo.png', // Pastikan nama file aset benar
+              'assets/logo.png', 
               width: 100,
               height: 104,
             ),
