@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:motion_apps/models/kit.dart';
 import 'package:motion_apps/models/plant.dart';
-import 'package:motion_apps/page/Homepage%20&%20Flow%20Utama/flow_utama.dart';
 import 'package:motion_apps/page/Profil/profile_screen.dart';
-import 'package:motion_apps/page/Pantau Tanaman/plant_monitoring_screen.dart';
+import 'package:motion_apps/widget/kit_card.dart';
 import 'package:motion_apps/widget/plant_card.dart';
+import 'package:motion_apps/widget/timer_widget.dart';
 import 'package:unicons/unicons.dart';
+import 'package:motion_apps/page/Pantau Tanaman/plant_monitoring_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; 
 
   void _onItemTapped(int index) {
     if (index == 2) return;
@@ -25,6 +26,8 @@ class _HomePageState extends State<HomePage> {
     });
 
     switch (index) {
+      case 0:
+        break;
       case 1:
         Navigator.push(
           context,
@@ -33,7 +36,6 @@ class _HomePageState extends State<HomePage> {
           setState(() => _selectedIndex = 0);
         });
         break;
-
       case 3:
         Navigator.push(
           context,
@@ -112,7 +114,7 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // HEADER
+            // --- HEADER HIJAU & GREETING ---
             SliverToBoxAdapter(
               child: Stack(
                 clipBehavior: Clip.none,
@@ -139,8 +141,10 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
+                                letterSpacing: 0.3,
                               ),
                             ),
+                            // Navigasi ke Profil lewat Avatar
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(
@@ -167,7 +171,6 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-
                   Positioned(
                     bottom: -55,
                     left: 20,
@@ -212,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                           Image.asset(
                             'lib/assets/Tree_inject.png',
                             width: 90,
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -243,7 +246,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            // REKOMENDASI
+            // GRID VIEW 
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
@@ -270,7 +273,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            // GRID TANAMAN
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               sliver: SliverGrid(
@@ -281,20 +283,47 @@ class _HomePageState extends State<HomePage> {
                   childAspectRatio: 0.75,
                 ),
                 delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PlantDetailScreen(plant: plants[index]),
-                          ),
-                        );
-                      },
-                      child: PlantCard(plant: plants[index]),
-                    );
+                  (context, index) {
+                    return PlantCard(plant: plants[index]);
                   },
                   childCount: plants.length,
+                ),
+              ),
+            ),
+
+            // FLASH SALE LIST
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+                child: Row(
+                  children: const [
+                    Text(
+                      'Starter Kit Flash Sale 🔥',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    TimerWidget(),
+                  ],
+                ),
+              ),
+            ),
+
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 250,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.only(left: 20),
+                  itemCount: kits.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: KitCard(kit: kits[index]),
+                    );
+                  },
                 ),
               ),
             ),
@@ -303,32 +332,48 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-
+      
       // NAVBAR
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: const Color(0xFF009F7F),
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(UniconsLine.estate),
-            label: "Beranda",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(UniconsLine.flower),
-            label: "Pantau Tanaman",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(UniconsLine.shopping_bag),
-            label: "Marketplace",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(UniconsLine.user_circle),
-            label: "Profil",
-          ),
-        ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          selectedItemColor: const Color(0xFF009F7F),
+          unselectedItemColor: Colors.grey,
+          showSelectedLabels: true,
+          showUnselectedLabels: true,
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,      
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(UniconsLine.estate),
+              label: "Beranda",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(UniconsLine.flower),
+              label: "Pantau Tanaman",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(UniconsLine.shopping_bag),
+              label: "Marketplace",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(UniconsLine.user_circle),
+              label: "Profil",
+            ),
+          ],
+        ),
       ),
     );
   }
